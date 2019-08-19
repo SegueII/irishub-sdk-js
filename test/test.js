@@ -2,9 +2,7 @@ import {IrisClient} from "../src"
 import {createEvent,EventType} from "../src/constants"
 const lcdUrl = "localhost:1317";
 //const lcdUrl = "http://192.168.150.31:31317";
-const rpcUrl = "irisnet-rpc.dev.rainbow.one";
-import {parseRat} from '../src/utils'
-import {IrisRouter} from '../src/modules/router-iris'
+const rpcUrl = "ws://irisnet-rpc.dev.rainbow.one";
 const chai = require('chai');
 const assert = chai.assert;
 describe('test modules', function () {
@@ -229,6 +227,7 @@ describe('test modules', function () {
         it('should block', async function () {
             client.clone(rpcUrl);
             let res = await client.block({height:100});
+            console.log(JSON.stringify(res));
             assert.isNotNull(res);
         });
     });
@@ -321,6 +320,38 @@ describe('test modules', function () {
         it('should tradeExactTokensForTokens', async function () {
             let amt = await client.tradeExactTokensForTokens("u-bny","u-btc",100000000000000000000);
             console.log(amt.toString());
+        });
+    })
+
+    describe("test asset",function () {
+        it('should getTokens', async function () {
+            let tokens = await client.getTokens("","faa1f3vflz39qr5sjzfkqmkzkr5dy7t646wyexy92y","");
+            assert.isArray(tokens)
+        });
+
+        it('should getToken', async function () {
+            let tokens = await client.getToken("bny");
+            assert.isNotEmpty(tokens)
+        });
+
+        it('should getGateway', async function () {
+            let tokens = await client.getGateway("gdex");
+            assert.isNotEmpty(tokens)
+        });
+
+        it('should getGateways', async function () {
+            let tokens = await client.getGateways();
+            assert.isArray(tokens)
+        });
+
+        it('should getGatewayFee', async function () {
+            let fee = await client.getGatewayFee("gdex");
+            assert.isNotEmpty(fee)
+        });
+
+        it('should GetTokensFee', async function () {
+            let fee = await client.GetTokensFee("bny");
+            assert.isNotEmpty(fee)
         });
     })
 });

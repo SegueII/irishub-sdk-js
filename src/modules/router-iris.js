@@ -183,4 +183,38 @@ subRouter.set(Method.GetReservePool,(args) =>{
     return apiUrl
 });
 
+//asset
+subRouter.set(Method.GetTokens,(args) =>{
+    let param = [];
+    if (!isEmpty(args[0])){
+        param.push(`source=${args[0]}`);
+    }
+    if (!isEmpty(args[1])){
+        param.push(`owner=${args[1]}`);
+    }
+    if (!isEmpty(args[2])){
+        param.push(`gateway=${args[2]}`);
+    }
+    let queryString = param.join("&");
+    return `/asset/tokens?${queryString}`;
+});
+subRouter.set(Method.GetToken,(args) =>{
+    return parseUrl("/asset/tokens/%s",args);
+});
+subRouter.set(Method.GetGateway,(args) =>{
+    return parseUrl("/asset/gateways/%s",args);
+});
+subRouter.set(Method.GetGateways,(args) =>{
+    if (!isEmpty(args[0])){
+        return `/asset/gateways?owner=${args[0]}`
+    }
+    return "/asset/gateways";
+});
+subRouter.set(Method.GetGatewayFee,(args) =>{
+    return parseUrl("/asset/fees/gateways/%s",args[0]);
+});
+subRouter.set(Method.GetTokensFee,(args) =>{
+    return parseUrl("/asset/fees/tokens/%s",args[0]);
+});
+
 export const IrisRouter = subRouter;

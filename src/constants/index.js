@@ -110,3 +110,11 @@ Method.GetReservePool = "getReservePool";
 
 Method.GetLcdVersion = "getLcdVersion";
 Method.GetNodeVersion = "getNodeVersion";
+
+Method.GetTokens = "getTokens";
+Method.GetToken = "getToken";
+Method.GetGateways = "getGateways";
+Method.GetGateway = "getGateway";
+Method.GetGatewayFee = "getGatewayFee";
+Method.GetTokensFee = "getTokensFee";
+
