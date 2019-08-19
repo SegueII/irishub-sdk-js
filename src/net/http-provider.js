@@ -14,6 +14,7 @@ export class HttpProvider{
         this._httpClient = axios.create({
             baseURL:url,
             timeout:timeout,
+            proxy:opt.proxy
         })
     }
 
