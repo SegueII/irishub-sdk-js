@@ -1,6 +1,6 @@
 import {IrisClient} from "../src"
 import {createEvent,EventType} from "../src/constants"
-const lcdUrl = "localhost:1317";
+const lcdUrl = "localhost:8080";
 //const lcdUrl = "http://192.168.150.31:31317";
 const rpcUrl = "ws://irisnet-rpc.dev.rainbow.one";
 const chai = require('chai');
@@ -14,6 +14,10 @@ describe('test modules', function () {
         fee:{denom: "iris-atto", amount: 600000000000000000},
         gas:10000,
         mode:"sync", //async | commit | sync
+        proxy:{
+            hostname: "localhost",
+            port: 1317
+        }
     });
 
     describe('should crypto module', async function() {
@@ -349,8 +353,8 @@ describe('test modules', function () {
             assert.isNotEmpty(fee)
         });
 
-        it('should GetTokensFee', async function () {
-            let fee = await client.GetTokensFee("bny");
+        it('should getTokensFee', async function () {
+            let fee = await client.getTokensFee("bny");
             assert.isNotEmpty(fee)
         });
     })

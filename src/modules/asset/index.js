@@ -66,7 +66,7 @@ export class Asset extends AbstractModule{
      *
      * @param id {string} - the unique id of the token
      */
-    GetTokensFee(id){
+    getTokensFee(id){
         return super.__get(Method.GetTokensFee,id)
     }
 }
