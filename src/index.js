@@ -1,7 +1,8 @@
 import {ModuleManager} from "./modules"
 import {ProviderFactory} from "./net"
 import {isEmpty,optional} from "./utils"
-import {defaultOpts, defaultServer, rpcMethods} from "./constants"
+import {ApiRouter} from "./modules/router"
+import {defaultOpts, defaultServer, Method, rpcMethods} from "./constants"
 import * as crypto from "iris-crypto"
 
 const camel = require("camelcase");
@@ -108,7 +109,11 @@ export class IrisClient {
      * @param opts {Object}
      */
     sendRawTransaction(tx, opts) {
-        return this.provider.post("tx/broadcast", tx, {
+        let urlHandler = ApiRouter.getSubRouter(this.opts.chain).get(Method.Broadcast);
+        if(!urlHandler){
+            throw new Error(`no handler found broadcast`);
+        }
+        return this.provider.post(urlHandler(opts), tx, {
             timeout: opts.timeout
         });
     }
