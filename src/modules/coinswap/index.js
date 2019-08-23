@@ -145,7 +145,7 @@ export class CoinSwap extends AbstractModule {
      */
     async tradeTokensForExactTokens(inputTokenDenom, outputTokenDenom, outputTokenAmount) {
         let irisAmount = await this.tradeIrisForExactTokens(outputTokenDenom, outputTokenAmount);
-        return this.tradeTokensForExactIris(inputTokenDenom, outputTokenAmount)
+        return this.tradeTokensForExactIris(inputTokenDenom, irisAmount)
     }
 }
 
