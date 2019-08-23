@@ -1,11 +1,8 @@
 import {WsProvider} from "./ws-provider"
 import {HttpProvider} from "./http-provider"
+import {wsProto,httpProto,allProto} from "../constants"
 
 const Url = require("url");
-const wsProto = ["ws:", "wss:"];
-const httpProto = ["http:", "https:"];
-const allProto = wsProto.concat(httpProto);
-
 export class ProviderFactory{
     /**
      * @return {ProviderFactory}
@@ -15,7 +12,7 @@ export class ProviderFactory{
     /**
      * create a agent of network by uri
      *
-     * @param {string} - lcd's url
+     * @param {string|Provider} - lcd's url
      * @returns {HttpProvider|Error|WsProvider}
      */
     static create(server,option = {}){

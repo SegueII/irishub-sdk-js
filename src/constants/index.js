@@ -16,6 +16,10 @@ export const defaultOpts = {
     mode: "sync",
     simulate: false
 };
+export const wsProto = ["ws:", "wss:"];
+export const httpProto = ["http:", "https:"];
+export const allProto = wsProto.concat(httpProto);
+
 export const defaultServer = "https://rpc.irisnet.org/";
 export const rpcMethods = [
     "subscribe",
