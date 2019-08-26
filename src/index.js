@@ -103,6 +103,15 @@ export class IrisClient {
     }
 
     /**
+     * Integrate iris-crypto's ability to build transaction
+     *
+     * @return {Ledger}
+     */
+    getLedger() {
+        return crypto.getLedger()
+    }
+
+    /**
      * send a signed tx to blockchain
      *
      * @param tx {Tx}
