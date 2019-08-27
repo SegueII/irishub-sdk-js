@@ -117,8 +117,9 @@ export class IrisClient {
      * @param tx {Tx}
      * @param opts {Object}
      */
-    sendRawTransaction(tx, opts) {
-        let urlHandler = ApiRouter.getSubRouter(this.opts.chain).get(Method.Broadcast);
+    sendRawTransaction(tx, opts = {}) {
+        let chain = optional(opts.chain,this.option.chain);
+        let urlHandler = ApiRouter.getSubRouter(chain).get(Method.Broadcast);
         if(!urlHandler){
             throw new Error(`no handler found broadcast`);
         }

@@ -159,7 +159,8 @@ subRouter.set(Method.GetNodeVersion,(args) =>{
 });
 
 subRouter.set(Method.Broadcast,(args) =>{
-    let apiUrl = parseUrl("tx/broadcast?simulate=%s",args.simulate);
+    let simulate = args ? (args.simulate ? args.simulate : false) : false;
+    let apiUrl = parseUrl("tx/broadcast?simulate=%s",simulate);
     switch (args.mode) {
         case "async": {
             apiUrl = `${apiUrl}&async=true`;
