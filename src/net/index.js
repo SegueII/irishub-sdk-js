@@ -19,15 +19,16 @@ export class ProviderFactory{
         if(typeof server !== "string"){
            return server
         }
-        let { protocol, hostname, port } = Url.parse(server);
+        let { protocol, hostname, port,path } = Url.parse(server);
         // default to http
         if (!allProto.includes(protocol)) {
             let p = Url.parse(`http://${server}`);
             protocol = p.protocol;
             hostname = p.hostname;
-            port = p.port
+            port = p.port;
+            path = p.path
         }
-        server = !port ? `${protocol}//${hostname}` : `${protocol}//${hostname}:${port}`;
+        server = !port ? `${protocol}//${hostname}${path}` : `${protocol}//${hostname}:${port}${path}`;
 
         if (wsProto.includes(protocol)) {
             return new WsProvider(server,option)
