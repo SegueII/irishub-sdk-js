@@ -1,14 +1,17 @@
-const Utils = require("../../utils");
-const AbstractModule = require("../module");
-class Stake extends AbstractModule{
+/** @module stake */
+import {isEmpty} from "../../utils"
+import AbstractModule from "../module"
+import {Method} from "../../constants"
+
+export default class Stake extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return opt {Stake}
      */
-    constructor(provider,opt) {
-        super(provider,opt)
+    constructor(provider, opt) {
+        super(provider, opt)
     }
 
     /**
@@ -19,7 +22,7 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getValidators(page, size) {
-        return super.__get("getValidators",page, size);
+        return super.__get(Method.GetValidators, page, size);
     }
 
     /**
@@ -29,10 +32,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getValidator(validator) {
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getValidator",validator);
+        return super.__get(Method.GetValidator, validator);
     }
 
     /**
@@ -42,10 +45,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getDelegations(delegator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        return super.__get("getDelegations",delegator);
+        return super.__get(Method.GetDelegations, delegator);
     }
 
     /**
@@ -55,10 +58,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getDelegationsByValidator(validator) {
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getDelegationsByValidator",validator);
+        return super.__get(Method.GetDelegationsByValidator, validator);
     }
 
     /**
@@ -68,10 +71,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getUbDelegations(delegator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        return super.__get("getUbDelegations",delegator);
+        return super.__get(Method.GetUbDelegations, delegator);
     }
 
     /**
@@ -81,10 +84,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getUbDelegationsByValidator(validator) {
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getUbDelegationsByValidator",validator);
+        return super.__get(Method.GetUbDelegationsByValidator, validator);
     }
 
     /**
@@ -94,10 +97,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getReDelegations(delegator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        return super.__get("getReDelegations",delegator);
+        return super.__get(Method.GetReDelegations, delegator);
     }
 
     /**
@@ -107,10 +110,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getReDelegationsByValidator(validator) {
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getReDelegationsByValidator",validator);
+        return super.__get(Method.GetReDelegationsByValidator, validator);
     }
 
     /**
@@ -120,10 +123,10 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getAllValidatorsByDelegator(delegator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        return super.__get("getAllValidatorsByDelegator",delegator);
+        return super.__get(Method.GetAllValidatorsByDelegator, delegator);
     }
 
     /**
@@ -134,13 +137,13 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getValidatorByDelegator(delegator, validator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getValidatorByDelegator",delegator,validator);
+        return super.__get(Method.GetValidatorByDelegator, delegator, validator);
     }
 
     /**
@@ -150,13 +153,13 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getDelegation(delegator, validator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getDelegation",delegator,validator);
+        return super.__get(Method.GetDelegation, delegator, validator);
     }
 
     /**
@@ -167,13 +170,13 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getUbDelegation(delegator, validator) {
-        if (Utils.isEmpty(delegator)) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty")
         }
-        if (Utils.isEmpty(validator)) {
+        if (isEmpty(validator)) {
             throw new Error("validator is empty")
         }
-        return super.__get("getUbDelegation",delegator,validator);
+        return super.__get(Method.GetUbDelegation, delegator, validator);
     }
 
     /**
@@ -182,7 +185,7 @@ class Stake extends AbstractModule{
      * @return {Promise}
      */
     getStakePool() {
-        return super.__get("getStakePool");
+        return super.__get(Method.GetStakePool);
     }
 
     /**
@@ -194,13 +197,13 @@ class Stake extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    delegate(delegator,validator,amount,config = {}){
+    delegate(delegator, validator, amount, config = {}) {
         let msg = {
             validator_addr: validator,
             delegation: amount
         };
         config.txType = "delegate";
-        return super.__sendTransaction(delegator,msg,config);
+        return super.__sendTransaction(delegator, msg, config);
     }
 
     /**
@@ -213,14 +216,14 @@ class Stake extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    redelegate(delegator,srcVarAddr,dstVarAddr,shares,config = {}){
+    redelegate(delegator, srcVarAddr, dstVarAddr, shares, config = {}) {
         let msg = {
             validator_src_addr: srcVarAddr,
             validator_dst_addr: dstVarAddr,
             shares_amount: shares
         };
         config.txType = "redelegate";
-        return super.__sendTransaction(delegator,msg,config);
+        return super.__sendTransaction(delegator, msg, config);
     }
 
     /**
@@ -232,14 +235,12 @@ class Stake extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    undelegate(delegator,valAddr,shares,config = {}){
+    undelegate(delegator, valAddr, shares, config = {}) {
         let msg = {
             validator_addr: valAddr,
             shares_amount: shares
         };
         config.txType = "begin_unbonding";
-        return super.__sendTransaction(delegator,msg,config);
+        return super.__sendTransaction(delegator, msg, config);
     }
 }
-
-module.exports = Stake;

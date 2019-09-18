@@ -1,13 +1,16 @@
-const AbstractModule = require("../module");
-class Slashing extends AbstractModule{
+/** @module slashing */
+import AbstractModule from "../module"
+import {Method} from "../../constants"
+
+export default class Slashing extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return {Slashing}
      */
-    constructor(provider,opt) {
-        super(provider,opt);
+    constructor(provider, opt) {
+        super(provider, opt);
     }
 
     /**
@@ -16,9 +19,7 @@ class Slashing extends AbstractModule{
      * @param valPubkey {string} - validator's consensus public key
      * @return {Promise}
      */
-    getSigningInfo(valPubkey){
-        return super.__get("getSigningInfo",valPubkey);
+    getSigningInfo(valPubkey) {
+        return super.__get(Method.GetSigningInfo, valPubkey);
     }
 }
-
-module.exports = Slashing;

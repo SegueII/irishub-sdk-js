@@ -1,11 +1,12 @@
-const IrisClient = require("../src");
-const lcdUrl = "irisnet-lcd.dev.rainbow.one";
+import {IrisClient} from "../src"
+import {createEvent,EventType} from "../src/constants"
+const lcdUrl = "localhost:1317";
 //const lcdUrl = "http://192.168.150.31:31317";
 const rpcUrl = "irisnet-rpc.dev.rainbow.one";
-
+import {parseRat} from '../src/utils'
+import {IrisRouter} from '../src/modules/router-iris'
 const chai = require('chai');
 const assert = chai.assert;
-
 describe('test modules', function () {
     let client = new IrisClient(lcdUrl,{
         network:"testnet",
@@ -17,20 +18,18 @@ describe('test modules', function () {
         mode:"sync", //async | commit | sync
     });
 
-    it('should router', function () {
-        let router = require("../src/modules/router");
-        console.log(router.getSubRouter("iris"))
-    });
-
     describe('should crypto module', async function() {
         it('should createAccount', function () {
             let crypto = client.getCrypto();
             let account = crypto.create('english');
             assert.isNotNull(account);
         });
+        it('should getRouter', function () {
+            console.log(JSON.stringify(client))
+        });
     });
 
-    describe('should IrisClient',function () {
+    describe('should Client',function () {
         it('should custom Provider', async function () {
             let provider = {
                 get : (url,opts) =>{
@@ -239,10 +238,89 @@ describe('test modules', function () {
     //     it("should subscribe", async function(){
     //         let wsClient = client.clone(`ws://${rpcUrl}`);
     //         await new Promise(() => {
-    //             wsClient.subscribe(client.event.NewBlock, (events) => {
+    //             let event = createEvent(EventType.NewBlock);
+    //             wsClient.subscribe(event, (events) => {
     //                 console.log(JSON.stringify(events));
     //             })
     //         })
     //     });
     // });
+
+    describe('should coinswap', function () {
+
+        let config = {
+            gas:20000, private_key:"80D45E1FAB9ACF59254F23C376E3AEAF139C847CD7A3126CDFD5216568730C90"
+        };
+        let sender = "faa1f3vflz39qr5sjzfkqmkzkr5dy7t646wyexy92y";
+        let deadline = new Date().getTime();
+
+        it('should addLiquidity', async function () {
+            let maxToken = {
+                denom: "bny-min",
+                amount: "10000000000000000000000"
+            };
+            let exactIrisAmt = "200000000000000000000000";
+            let minLiquidity = "100000000000000000";
+            let result = await client.addLiquidity(maxToken,exactIrisAmt,minLiquidity,deadline,sender,config);
+            console.log(JSON.stringify(result));
+        });
+
+        it('should removeLiquidity',async function () {
+            let min_token = "1";
+            let withdrawLiquidity = {
+                denom: "u-btc-min",
+                amount: "10000000000000000000000"
+            };
+            let minIrisAmt = "10000000000000000";
+            let result = await client.removeLiquidity(min_token,withdrawLiquidity,minIrisAmt,deadline,"faa1f3vflz39qr5sjzfkqmkzkr5dy7t646wyexy92y",config);
+            console.log(JSON.stringify(result));
+        });
+
+        it('should swap', async function () {
+            let input = {
+                address:sender,
+                coin:{
+                    denom: "iris-atto",
+                    amount: "10000000000000000000000000000000"
+                },
+            };
+            let output = {
+                address:"faa1hf8hg62fy9wttj9rar6xlmygnukwtg3zx5qxa5",
+                coin:{
+                    denom: "btc-min",
+                    amount: "1"
+                },
+            };
+            let is_buy_order = true;
+            let result = await client.swap(input,output,deadline,is_buy_order,config);
+            console.log(JSON.stringify(result));
+        });
+
+        it('should getReservePool', async function () {
+            let pool = await client.getReservePool("u-btc");
+            console.log(JSON.stringify(pool));
+        });
+
+        it('should tradeExactIrisForTokens', async function () {
+            let amt = await client.tradeExactIrisForTokens("u-bny",30000000000000000000);
+            console.log(amt/1000000000000000000);
+        });
+        it('should tradeIrisForExactTokens', async function () {
+            let amt = await client.tradeIrisForExactTokens("u-bny",5);
+            console.log(amt.toString());
+        });
+        it('should tradeExactTokensForIris', async function () {
+            let amt = await client.tradeExactTokensForIris("u-bny",2000000000000000000);
+            console.log(amt.toString());
+        });
+        it('should tradeTokensForExactIris', async function () {
+            let amt = await client.tradeTokensForExactIris("u-bny",100000000000000000000);
+            console.log(amt.toString());
+        });
+
+        it('should tradeExactTokensForTokens', async function () {
+            let amt = await client.tradeExactTokensForTokens("u-bny","u-btc",100000000000000000000);
+            console.log(amt.toString());
+        });
+    })
 });

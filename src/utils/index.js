@@ -1,16 +1,19 @@
-const isString = (obj) => {
+import {_0, _MAX_UINT256} from "../constants"
+import BigNumber from 'bignumber.js'
+
+export const isString = (obj) => {
     return typeof obj === "string"
 };
 
-const isBuffer = (obj) => {
+export const isBuffer = (obj) => {
     return Buffer.isBuffer(obj)
 };
 
-const isArray = (obj) => {
+export const isArray = (obj) => {
     return Array.isArray(obj)
 };
 
-const isEmpty = (obj) => {
+export const isEmpty = (obj) => {
     switch (typeof obj) {
         case "undefined": {
             return true
@@ -33,45 +36,68 @@ const isEmpty = (obj) => {
     }
 };
 
-const deepCopy = (obj) => {
-    if(typeof obj != 'object'){
+export const deepCopy = (obj) => {
+    if (typeof obj != 'object') {
         return obj;
     }
     let o = {};
-    for ( let attr in obj) {
+    for (let attr in obj) {
         o[attr] = deepCopy(obj[attr]);
     }
     return o;
 };
 
-module.exports = class Utils {
-    static isString(obj){
-        return isString(obj)
+export const parseUrl = (url, ...args) => {
+    let u = url;
+    if (Array.isArray(args)) {
+        args.forEach((param) => {
+            u = u.replace("%s", param)
+        });
     }
+    return u
+};
 
-    static isBuffer(obj){
-        return isBuffer(obj)
+export const optional = (value, option) => {
+    if (isEmpty(value)) return option;
+    return value
+};
+
+export const ensureAllUInt256 = (bigNumbers) => {
+    bigNumbers.forEach(ensureUInt256)
+};
+
+export const ensureUInt256 = (bigNumber) => {
+    if (!bigNumber.isInteger() || bigNumber.isLessThan(_0) || bigNumber.isGreaterThan(_MAX_UINT256)) {
+        throw Error(`Passed bigNumber '${bigNumber}' is not a valid uint256.`)
     }
+};
 
-    static isArray(obj){
-        return isArray(obj)
-    }
-
-    static isEmpty(obj) {
-        return isEmpty(obj)
-    }
-
-    static parseUrl(url,...args){
-        let u = url;
-        if (Array.isArray(args)) {
-            args.forEach((param) =>{
-                u = u.replace("%s",param)
-            });
+export const parseRat = (ratStr) => {
+    ratStr = Number.parseFloat(ratStr);
+    if (ratStr === 0) {
+        return {
+            numerator: new BigNumber('0'),
+            denominator: new BigNumber('1')
         }
-        return u
     }
+    ratStr = `${ratStr}`;
+    let dotIndex = ratStr.indexOf(".");
+    if (dotIndex === -1) {
+        return {
+            numerator: new BigNumber(ratStr),
+            denominator: new BigNumber('1')
+        }
+    }
+    let a = ratStr.substr(0, dotIndex);
+    let b = ratStr.substr(dotIndex + 1);
+    let m = b.length;
+    let intPart = new BigNumber(Number.parseInt(a) * Math.pow(10, m));
 
-    static deepCopy(obj){
-        return deepCopy(obj)
+    let denominator = new BigNumber(a === "0" ? Math.pow(10, m) : intPart);
+    let numerator = new BigNumber(b).plus(intPart);
+
+    return {
+        numerator: numerator,
+        denominator: denominator
     }
 };

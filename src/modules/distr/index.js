@@ -1,15 +1,17 @@
-const Utils = require("../../utils");
-const AbstractModule = require("../module");
+/** @module distribution */
+import {isEmpty} from "../../utils"
+import AbstractModule from "../module"
+import {Method} from "../../constants"
 
-class Distribution extends AbstractModule{
+export default class Distribution extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return {Distribution}
      */
-    constructor(provider,opt) {
-        super(provider,opt)
+    constructor(provider, opt) {
+        super(provider, opt)
     }
 
     /**
@@ -17,11 +19,11 @@ class Distribution extends AbstractModule{
      * @param delegator {string} - delegator's address
      * @return {Promise}
      */
-    getWithdrawAddr(delegator){
-        if (Utils.isEmpty(delegator)) {
+    getWithdrawAddr(delegator) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty");
         }
-        return super.__get("getWithdrawAddr",delegator);
+        return super.__get(Method.GetWithdrawAddr, delegator);
     }
 
     /**
@@ -29,11 +31,11 @@ class Distribution extends AbstractModule{
      * @param delegator {string} - delegator's address
      * @return {Promise}
      */
-    queryRewards(delegator){
-        if (Utils.isEmpty(delegator)) {
+    queryRewards(delegator) {
+        if (isEmpty(delegator)) {
             throw new Error("delegator is empty");
         }
-        return super.__get("queryRewards",delegator);
+        return super.__get(Method.QueryRewards, delegator);
     }
 
     /**
@@ -41,8 +43,8 @@ class Distribution extends AbstractModule{
      *
      * @return {Promise}
      */
-    getCommunityTax(){
-        return super.__get("getCommunityTax");
+    getCommunityTax() {
+        return super.__get(Method.GetCommunityTax);
     }
 
     /**
@@ -52,9 +54,9 @@ class Distribution extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    withdrawAllRewards(delegator,config = {}){
+    withdrawAllRewards(delegator, config = {}) {
         config.txType = "withdraw_delegation_rewards_all";
-        return super.__sendTransaction(delegator,null,config);
+        return super.__sendTransaction(delegator, null, config);
     }
 
     /**
@@ -65,13 +67,11 @@ class Distribution extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    withdrawRewards(delegator,varAddr,config = {}){
+    withdrawRewards(delegator, varAddr, config = {}) {
         let msg = {
             validator_addr: varAddr,
         };
         config.txType = "withdraw_delegation_reward";
-        return super.__sendTransaction(delegator,msg,config);
+        return super.__sendTransaction(delegator, msg, config);
     }
 }
-
-module.exports = Distribution;

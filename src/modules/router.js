@@ -1,10 +1,11 @@
-class ApiRouter {
-    static getSubRouter(chain){
+import IrisRouter from "./router-iris"
+import CosmosRouter from "./router-cosmos"
+
+let ApiRouter;
+export default ApiRouter = {
+    getSubRouter : (chain) => {
         return ApiRouter[chain]
-    }
-}
-
-ApiRouter.iris = require("./router-iris").module;
-ApiRouter.cosmos = require("./router-cosmos").module;
-
-module.exports = ApiRouter;
+    },
+    iris : IrisRouter,
+    cosmos : CosmosRouter,
+};

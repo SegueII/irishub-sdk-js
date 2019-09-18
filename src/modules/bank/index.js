@@ -1,15 +1,17 @@
-const Utils = require("../../utils");
-const AbstractModule = require("../module");
+/** @module bank */
+import {isEmpty} from "../../utils"
+import {Method} from "../../constants"
+import AbstractModule from "../module"
 
-class Bank extends AbstractModule{
+export default class Bank extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return {Bank}
      */
-    constructor(provider,opt) {
-        super(provider,opt)
+    constructor(provider, opt) {
+        super(provider, opt)
     }
 
     /**
@@ -29,10 +31,10 @@ class Bank extends AbstractModule{
      * @returns {*}
      */
     getCoinType(coinType) {
-        if (Utils.isEmpty(coinType)) {
+        if (isEmpty(coinType)) {
             throw new Error("coinType is empty");
         }
-        return super.__get("getCoinType",coinType)
+        return super.__get(Method.GetCoinType, coinType)
     }
 
     /**
@@ -41,7 +43,7 @@ class Bank extends AbstractModule{
      * @returns {*}
      */
     getTokenStats() {
-        return super.__get("getTokenStats")
+        return super.__get(Method.GetTokenStats)
     }
 
     /**
@@ -52,14 +54,12 @@ class Bank extends AbstractModule{
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    async transfer(from,to,tokens,config = {}){
+    async transfer(from, to, tokens, config = {}) {
         let msg = {
             to: to,
             coins: tokens
         };
         config.txType = "transfer";
-        return super.__sendTransaction(from,msg,config);
+        return super.__sendTransaction(from, msg, config);
     }
 }
-
-module.exports = Bank;

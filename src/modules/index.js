@@ -1,26 +1,27 @@
-const Bank = require("./bank");
-const Stake = require("./stake");
-const Tm = require("./tm");
-const Version = require("./version");
-const Slashing = require("./slashing");
-const Gov = require("./gov");
-const Distribution = require("./distr");
+import Bank from "./bank";
+import Stake from "./stake";
+import Tm from "./tm";
+import Version from "./version";
+import Slashing from "./slashing";
+import Gov from "./gov";
+import Distribution from "./distr";
+import CoinSwap from "./coinswap";
 
-class ModuleManager {
+export default class ModuleManager {
 
     /**
      *
      * @param provider
      */
-    constructor(provider,opt){
-        this.provider = provider;
-        this._add(new Bank(provider,opt));
-        this._add(new Stake(provider,opt));
-        this._add(new Tm(provider,opt));
-        this._add(new Version(provider,opt));
-        this._add(new Slashing(provider,opt));
-        this._add(new Gov(provider,opt));
-        this._add(new Distribution(provider,opt));
+    constructor(provider, opt) {
+        this.register(new Bank(provider, opt))
+            .register(new Stake(provider, opt))
+            .register(new Tm(provider, opt))
+            .register(new Version(provider, opt))
+            .register(new Slashing(provider, opt))
+            .register(new Gov(provider, opt))
+            .register(new Distribution(provider, opt))
+            .register(new CoinSwap(provider, opt));
     }
 
     /**
@@ -28,7 +29,7 @@ class ModuleManager {
      * @param name
      * @returns {boolean}
      */
-    hasMethod(name){
+    hasMethod(name) {
         return typeof this.methods[name] !== 'undefined';
     };
 
@@ -37,7 +38,7 @@ class ModuleManager {
      * @param name
      */
     createMethod(name) {
-        if (this.hasMethod(name)){
+        if (this.hasMethod(name)) {
             return this.methods[name];
         }
         throw new Error(`not found this method:${name}`)
@@ -48,19 +49,18 @@ class ModuleManager {
      * @param module
      * @private
      */
-    _add(module){
-       Object.getOwnPropertyNames(Object.getPrototypeOf(module)).forEach((name) => {
-           if(!this.methods){
-               this.methods = {}
-           }
-           if(name !== "constructor"){
-               if(this.methods[name]){
-                   throw new Error(`method : ${name} has already register`)
-               }
-               this.methods[name] = module
-           }
-       })
-
+    register(module) {
+        Object.getOwnPropertyNames(Object.getPrototypeOf(module)).forEach((name) => {
+            if (!this.methods) {
+                this.methods = {}
+            }
+            if (name !== "constructor" && !name.startsWith("_")){
+                if (this.methods[name]) {
+                    throw new Error(`method : ${name} has already register`)
+                }
+                this.methods[name] = module
+            }
+        });
+        return this;
     }
 }
-module.exports = ModuleManager;

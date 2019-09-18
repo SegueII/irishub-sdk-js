@@ -1,13 +1,16 @@
-const AbstractModule = require("../module");
-class Version extends AbstractModule{
+/** @module version */
+import AbstractModule from "../module"
+import {Method} from "../../constants"
+
+export default class Version extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return {Version}
      */
-    constructor(provider,opt) {
-        super(provider,opt);
+    constructor(provider, opt) {
+        super(provider, opt);
     }
 
     /**
@@ -15,8 +18,8 @@ class Version extends AbstractModule{
      *
      * @return {Promise}
      */
-    getLcdVersion(){
-        return super.__get("getLcdVersion");
+    getLcdVersion() {
+        return super.__get(Method.GetLcdVersion);
     }
 
     /**
@@ -24,9 +27,7 @@ class Version extends AbstractModule{
      *
      * @return {Promise}
      */
-    getNodeVersion(){
-        return super.__get("getNodeVersion");
+    getNodeVersion() {
+        return super.__get(Method.GetNodeVersion);
     }
 }
-
-module.exports = Version;

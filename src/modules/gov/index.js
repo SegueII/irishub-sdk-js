@@ -1,15 +1,17 @@
-const Utils = require("../../utils");
-const AbstractModule = require("../module");
+/** @module gov */
+import {isEmpty} from "../../utils"
+import AbstractModule from "../module"
+import {Method} from "../../constants"
 
-class Gov extends AbstractModule{
+export default class Gov extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
      * @return {Gov}
      */
-    constructor(provider,opt) {
-        super(provider,opt)
+    constructor(provider, opt) {
+        super(provider, opt)
     }
 
     /**
@@ -21,8 +23,8 @@ class Gov extends AbstractModule{
      * @param limit {number} - limit to latest [number] proposals. Defaults to all proposals
      * @return {Promise}
      */
-    getProposals(voter,depositor,status,limit){
-        return super.__get("getProposals",voter,depositor,status,limit);
+    getProposals(voter, depositor, status, limit) {
+        return super.__get(Method.GetProposals, voter, depositor, status, limit);
     }
 
     /**
@@ -31,11 +33,11 @@ class Gov extends AbstractModule{
      * @param proposalId {number} - proposal's id
      * @return {Promise}
      */
-    getProposal(proposalId){
-        if (Utils.isEmpty(proposalId)) {
+    getProposal(proposalId) {
+        if (isEmpty(proposalId)) {
             throw new Error("proposalId is empty");
         }
-        return super.__get("getProposal",proposalId);
+        return super.__get(Method.GetProposal, proposalId);
     }
 
     /**
@@ -44,11 +46,11 @@ class Gov extends AbstractModule{
      * @param proposalId {number} - proposal's id
      * @return {Promise}
      */
-    getDeposits(proposalId){
-        if (Utils.isEmpty(proposalId)) {
+    getDeposits(proposalId) {
+        if (isEmpty(proposalId)) {
             throw new Error("proposalId is empty");
         }
-        return super.__get("getDeposits",proposalId);
+        return super.__get(Method.GetDeposits, proposalId);
     }
 
     /**
@@ -58,14 +60,14 @@ class Gov extends AbstractModule{
      * @param depositor {string} - depositor's address
      * @return {Promise}
      */
-    getDeposit(proposalId,depositor){
-        if (Utils.isEmpty(proposalId)) {
+    getDeposit(proposalId, depositor) {
+        if (isEmpty(proposalId)) {
             throw new Error("proposalId is empty");
         }
-        if (Utils.isEmpty(depositor)) {
+        if (isEmpty(depositor)) {
             throw new Error("depositor is empty");
         }
-        return super.__get("getDeposit",proposalId,depositor);
+        return super.__get(Method.GetDeposit, proposalId, depositor);
     }
 
     /**
@@ -74,11 +76,11 @@ class Gov extends AbstractModule{
      * @param proposalId {number} - proposal's id
      * @return {Promise}
      */
-    getVotes(proposalId){
-        if (Utils.isEmpty(proposalId)) {
+    getVotes(proposalId) {
+        if (isEmpty(proposalId)) {
             throw new Error("proposalId is empty");
         }
-        return super.__get("getVotes",proposalId);
+        return super.__get(Method.GetVotes, proposalId);
     }
 
     /**
@@ -88,14 +90,14 @@ class Gov extends AbstractModule{
      * @param voter {string} - voter's address
      * @return {Promise}
      */
-    getVote(proposalId,voter){
-        if (Utils.isEmpty(proposalId)) {
+    getVote(proposalId, voter) {
+        if (isEmpty(proposalId)) {
             throw new Error("proposalId is empty");
         }
-        if (Utils.isEmpty(voter)) {
+        if (isEmpty(voter)) {
             throw new Error("voter is empty");
         }
-        return super.__get("getVote",proposalId,voter);
+        return super.__get(Method.GetVote, proposalId, voter);
     }
 
     /**
@@ -104,12 +106,10 @@ class Gov extends AbstractModule{
      * @param module {string} - module's symbol,valid values can be "gov","stake","bank","auth"
      * @return {Promise}
      */
-    getParams(module){
-        if (Utils.isEmpty(module)) {
+    getParams(module) {
+        if (isEmpty(module)) {
             throw new Error("module is empty");
         }
-        return super.__get("getParams",module);
+        return super.__get(Method.GetParams, module);
     }
 }
-
-module.exports = Gov;
