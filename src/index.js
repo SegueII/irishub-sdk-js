@@ -107,7 +107,7 @@ export class IrisClient {
      *
      * @return {Ledger}
      */
-    getLedger() {
+    static getLedger() {
         return crypto.getLedger()
     }
 
