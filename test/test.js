@@ -1,7 +1,7 @@
 import {IrisClient} from "../src"
 import {createEvent,EventType} from "../src/constants"
-const lcdUrl = "localhost:1317";
-//const lcdUrl = "http://192.168.150.31:31317";
+//const lcdUrl = "https://rpc.irisnet.org";
+const lcdUrl = "127.0.0.1:1317";
 const rpcUrl = "irisnet-rpc.dev.rainbow.one";
 import {parseRat} from '../src/utils'
 import {IrisRouter} from '../src/modules/router-iris'
@@ -186,6 +186,7 @@ describe('test modules', function () {
     });
 
     describe('should gov module', async function() {
+        this.timeout(10000);
         it('should getProposals', async function () {
             let res = await client.getProposals(null,null,"Rejected");
             assert.isNotNull(res);
@@ -213,6 +214,29 @@ describe('test modules', function () {
         it('should getParams', async function () {
             let res = await client.getParams("stake");
             assert.isNotNull(res);
+        });
+
+        it('should deposit', async function () {
+            let depositor = "faa1f3vflz39qr5sjzfkqmkzkr5dy7t646wyexy92y";
+            let memo = "1";
+            let private_key = "80D45E1FAB9ACF59254F23C376E3AEAF139C847CD7A3126CDFD5216568730C90";
+            let gas = 30000;
+            let fee = {denom: "iris-atto", amount: 600000000000000000};
+            let amount = [{denom: "iris-atto", amount: 30000000000000000000000}];
+            let mode = "commit";
+            let res = await client.deposit(depositor,3,amount,{fee,gas,memo,private_key,mode});
+            console.log(JSON.stringify(res))
+        });
+
+        it('should vote', async function () {
+            let voter = "faa1f3vflz39qr5sjzfkqmkzkr5dy7t646wyexy92y";
+            let memo = "1";
+            let private_key = "80D45E1FAB9ACF59254F23C376E3AEAF139C847CD7A3126CDFD5216568730C90";
+            let gas = 30000;
+            let fee = {denom: "iris-atto", amount: 600000000000000000};
+            let mode = "commit";
+            let res = await client.vote(voter,2,0x01,{fee,gas,memo,private_key,mode});
+            console.log(JSON.stringify(res))
         });
     });
 
@@ -322,5 +346,44 @@ describe('test modules', function () {
             let amt = await client.tradeExactTokensForTokens("u-bny","u-btc",100000000000000000000);
             console.log(amt.toString());
         });
-    })
+    });
+
+    describe('should asset', function () {
+        it("should getToken", async function(){
+            let token = await client.getToken("axon");
+            assert.isNotNull(token);
+        });
+
+        it("should getTokens", async function(){
+            let token = await client.getTokens("native","1","2");
+            assert.isNotNull(token);
+        });
+
+        it("should getGateway", async function(){
+            let token = await client.getGateway("sss");
+            assert.isNull(token);
+        });
+
+        it("should getGateways", async function(){
+            let token = await client.getGateways();
+            assert.isNotNull(token);
+        });
+
+        it("should getGatewayFee", async function(){
+            let token = await client.getGatewayFee("");
+            assert.isNotNull(token);
+        });
+
+        it("should getTokenFee", async function(){
+            let token = await client.getTokenFee("axon");
+            assert.isNotNull(token);
+        });
+    });
+
+    describe('should htlc', function () {
+        it("should getToken", async function(){
+            let token = await client.getHTLC("axon");
+            assert.isNotNull(token);
+        });
+    });
 });

@@ -39,11 +39,7 @@ export default class AbstractModule {
     }
 
     async __get(method, ...args) {
-        let urlHandler = ApiRouter.getSubRouter(this.opt.chain).get(method);
-        if (!urlHandler) {
-            throw new Error(`no handler found ${method}`);
-        }
-        return this.provider.get(urlHandler(args));
+        return this.provider.get(ApiRouter.getPath(this.opt.chain,method,args));
     }
 
     /**
@@ -152,11 +148,7 @@ export default class AbstractModule {
             stdTx = builder.buildAndSignTx(req, opts.private_key);
         }
 
-        let urlHandler = ApiRouter.getSubRouter(this.opt.chain).get(Method.Broadcast);
-        if (!urlHandler) {
-            throw new Error(`no handler found broadcast`);
-        }
-        return this.provider.post(urlHandler(opts), stdTx.GetData(), {
+        return this.provider.post(ApiRouter.getPath(this.opt.chain,Method.Broadcast,opts), stdTx.GetData(), {
             timeout: opts.timeout
         }).then(res => {
             return {

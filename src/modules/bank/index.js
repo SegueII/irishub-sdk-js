@@ -3,7 +3,7 @@ import {isEmpty} from "../../utils"
 import {Method} from "../../constants"
 import AbstractModule from "../module"
 
-export default class Bank extends AbstractModule {
+class Bank extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
@@ -54,7 +54,7 @@ export default class Bank extends AbstractModule {
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      * @return {Promise<{resp: *, hash: string}>}
      */
-    async transfer(from, to, tokens, config = {}) {
+    transfer(from, to, tokens, config = {}) {
         let msg = {
             to: to,
             coins: tokens
@@ -63,3 +63,5 @@ export default class Bank extends AbstractModule {
         return super.__sendTransaction(from, msg, config);
     }
 }
+
+export default Bank;

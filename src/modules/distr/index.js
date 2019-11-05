@@ -3,7 +3,7 @@ import {isEmpty} from "../../utils"
 import AbstractModule from "../module"
 import {Method} from "../../constants"
 
-export default class Distribution extends AbstractModule {
+class Distribution extends AbstractModule {
     /**
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
@@ -75,3 +75,5 @@ export default class Distribution extends AbstractModule {
         return super.__sendTransaction(delegator, msg, config);
     }
 }
+
+export default Distribution;
