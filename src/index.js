@@ -1,11 +1,11 @@
-import {ModuleManager} from "./modules"
-import {ProviderFactory} from "./net"
-import {isEmpty,optional} from "./utils"
-import {ApiRouter} from "./modules/router"
-import {defaultOpts, defaultServer, Method, rpcMethods} from "./constants"
-import * as crypto from "iris-crypto"
+import { ModuleManager } from './modules'
+import { ProviderFactory } from './net'
+import { isEmpty, optional } from './utils'
+import { ApiRouter } from './modules/router'
+import { defaultOpts, defaultServer, Method, rpcMethods } from './constants'
+import * as crypto from 'irisnet-crypto'
 
-const camel = require("camelcase");
+const camel = require('camelcase')
 
 export class IrisClient {
 
@@ -17,18 +17,18 @@ export class IrisClient {
      * @returns {IrisClient}
      */
     constructor(server = defaultServer, option = defaultOpts) {
-        this.__init(option);
-        this.provider = ProviderFactory.create(server, option);
+        this.__init(option)
+        this.provider = ProviderFactory.create(server, option)
         return this.__createProxy(this.provider, option)
     }
 
     __init(option) {
         this.option = {
-            chain: optional(option.chain,defaultOpts.chain),
-            network: optional(option.network,defaultOpts.network),
-            fee: optional(option.fee,defaultOpts.fee),
-            gas: optional(option.gas,defaultOpts.gas),
-            timeout: optional(option.timeout,defaultOpts.timeout),
+            chain: optional(option.chain, defaultOpts.chain),
+            network: optional(option.network, defaultOpts.network),
+            fee: optional(option.fee, defaultOpts.fee),
+            gas: optional(option.gas, defaultOpts.gas),
+            timeout: optional(option.timeout, defaultOpts.timeout),
         }
     }
 
@@ -41,21 +41,21 @@ export class IrisClient {
      */
     __createProxy(provider, option) {
         //overwrite property
-        this.provider = provider;
-        this.option = option;
+        this.provider = provider
+        this.option = option
         return new Proxy(this, {
             get: (target, name) => {
                 if (target[name]) {
-                    return target[name];
+                    return target[name]
                 }
-                let factory = new ModuleManager(provider, option);
+                let factory = new ModuleManager(provider, option)
                 let fn = function (...args) {
-                    let o = factory.createMethod(name);
-                    return Reflect.apply(o[name], o, args);
-                };
-                return fn;
+                    let o = factory.createMethod(name)
+                    return Reflect.apply(o[name], o, args)
+                }
+                return fn
             }
-        });
+        })
     }
 
     /**
@@ -64,13 +64,13 @@ export class IrisClient {
      * @param uri {string} - lcd's uri
      */
     clone(uri, option) {
-        let provider = this.provider;
+        let provider = this.provider
         if (!isEmpty(uri)) {
-            provider = ProviderFactory.create(uri);
+            provider = ProviderFactory.create(uri)
         }
 
         if (isEmpty(option)) {
-            option = this.option;
+            option = this.option
         }
 
         return this.__createProxy(provider, option)
@@ -85,7 +85,7 @@ export class IrisClient {
     }
 
     /**
-     * Integrate iris-crypto's ability to create accounts
+     * Integrate irisnet-crypto's ability to create accounts
      *
      * @return {Crypto}
      */
@@ -94,7 +94,7 @@ export class IrisClient {
     }
 
     /**
-     * Integrate iris-crypto's ability to build transaction
+     * Integrate irisnet-crypto's ability to build transaction
      *
      * @return {Crypto}
      */
@@ -103,7 +103,7 @@ export class IrisClient {
     }
 
     /**
-     * Integrate iris-crypto's ability to build transaction
+     * Integrate irisnet-crypto's ability to build transaction
      *
      * @return {Ledger}
      */
@@ -118,23 +118,22 @@ export class IrisClient {
      * @param opts {Object}
      */
     sendRawTransaction(tx, opts = {}) {
-        let chain = optional(opts.chain,this.option.chain);
-        let urlHandler = ApiRouter.getSubRouter(chain).get(Method.Broadcast);
-        if(!urlHandler){
-            throw new Error(`no handler found broadcast`);
+        let chain = optional(opts.chain, this.option.chain)
+        let urlHandler = ApiRouter.getSubRouter(chain).get(Method.Broadcast)
+        if (!urlHandler) {
+            throw new Error(`no handler found broadcast`)
         }
         return this.provider.post(urlHandler(opts), tx, {
             timeout: opts.timeout
-        });
+        })
     }
 }
 
 // add methods to IrisClient class
 for (let name of rpcMethods) {
     IrisClient.prototype[camel(name)] = function (args, listener) {
-        return this.provider.call(name, args, listener)
-            .then((res) => {
-                return res
-            })
+        return this.provider.call(name, args, listener).then((res) => {
+            return res
+        })
     }
 }

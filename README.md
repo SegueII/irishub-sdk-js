@@ -2,7 +2,7 @@
 
 The IRIS Chain JavaScript SDK allows browsers and node.js clients  to interact with IRISHUB. It includes the following core  components:
 
-- **crypto** - core cryptographic functions.integrate [iris-crypto's](https://github.com/irisnet/irisnet-crypto) ability
+- **crypto** - core cryptographic functions.integrate [irisnet-crypto's](https://github.com/irisnet/irisnet-crypto) ability
 
 - **net** - net encapsulates http and websocket protocols, providing sdk access to irishub
 
@@ -18,7 +18,7 @@ The IRIS Chain JavaScript SDK allows browsers and node.js clients  to interact w
   - slashing - Slashing module APIs
   - stake - stake module APIs
   - tm - tendermint module APIs
-  - Version - version module APIs
+  - version - version module APIs
 
   detailed interface documentation please refer to [swagger docs]([http://irisnet-lcd.rainbow.one/](http://irisnet-lcd.rainbow.one/))
 
@@ -26,18 +26,16 @@ The IRIS Chain JavaScript SDK allows browsers and node.js clients  to interact w
 
 - **test** - some test case
 
-# Installation
+## Installation
 
 Install by NPM :
 
 `git+https://github.com/irisnet/sdk-js`
 
-# API
+## API
 
 For up-to-date API documentation, please check the [api](./docs/api.md)
 
-# Contributing
+## Contributing
 
-Contributions to the IRIS JavaScript SDK are welcome. Please 
-ensure that you have tested the changes with a local client and have 
-added unit test coverage for your code,you can also submit an issue on github.
+Contributions to the IRIS JavaScript SDK are welcome. Please ensure that you have tested the changes with a local client and have added unit test coverage for your code,you can also ubmit an issue on github.
