@@ -92,8 +92,8 @@ export class CoinSwap extends AbstractModule {
      * @param inputIrisAmount {number} - The input amount of Iris.
      */
     async tradeExactIrisForTokens (outputTokenDenom, inputIrisAmount) {
-        let pool = await this.getReservePool(outputTokenDenom)
-        return getInputPrice(inputIrisAmount, pool.iris.amount, pool.token.amount, pool.fee)
+        let data = await this.getReservePool(outputTokenDenom)
+        return getInputPrice(inputIrisAmount, data.result.standard.amount, data.result.token.amount, data.result.fee)
     }
 
     /**
@@ -102,8 +102,8 @@ export class CoinSwap extends AbstractModule {
      * @param outputTokenAmount {number} - Denom of output token.
      */
     async tradeIrisForExactTokens (outputTokenDenom, outputTokenAmount) {
-        let pool = await this.getReservePool(outputTokenDenom)
-        return getOutputPrice(outputTokenAmount, pool.iris.amount, pool.token.amount, pool.fee)
+        let data = await this.getReservePool(outputTokenDenom)
+        return getOutputPrice(outputTokenAmount, data.result.standard.amount, data.result.token.amount, data.result.fee)
     }
 
     /**
@@ -112,8 +112,8 @@ export class CoinSwap extends AbstractModule {
      * @param inputTokenAmount {number} - Amount of input token.
      */
     async tradeExactTokensForIris (inputTokenDenom, inputTokenAmount) {
-        let pool = await this.getReservePool(inputTokenDenom)
-        return getInputPrice(inputTokenAmount, pool.token.amount, pool.iris.amount, pool.fee)
+        let data = await this.getReservePool(inputTokenDenom)
+        return getInputPrice(inputTokenAmount, data.result.token.amount, data.result.standard.amount, data.result.fee)
     }
 
     /**
@@ -122,8 +122,8 @@ export class CoinSwap extends AbstractModule {
      * @param outputIrisAmount {number} - The output amount of iris
      */
     async tradeTokensForExactIris (inputTokenDenom, outputIrisAmount) {
-        let pool = await this.getReservePool(inputTokenDenom)
-        return getOutputPrice(outputIrisAmount, pool.token.amount, pool.iris.amount, pool.fee)
+        let data = await this.getReservePool(inputTokenDenom)
+        return getOutputPrice(outputIrisAmount, data.result.token.amount, data.result.standard.amount, data.result.fee)
     }
 
     /**
