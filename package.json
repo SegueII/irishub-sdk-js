@@ -18,7 +18,7 @@
         "ndjson": "^1.5.0",
         "camelcase": "^5.3.1",
         "bignumber.js": "^9.0.0",
-        "irisnet-crypto": "git+https://github.com/hangts/irisnet-crypto.git#feature/RPC",
+        "irisnet-crypto": "git+https://github.com/SegueII/irisnet-crypto.git#coinswap",
         "ripemd160": "latest",
         "bech32": "latest"
     },
