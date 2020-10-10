@@ -1,4 +1,6 @@
-/** @module Auth */
+/** @module auth */
+import { isEmpty } from '../../utils'
+import { Method } from '../../constants'
 import { AbstractModule } from '../module'
 
 export class Auth extends AbstractModule {
@@ -16,9 +18,11 @@ export class Auth extends AbstractModule {
      * Get the account information on blockchain
      *
      * @param address {string} - address of account
-     * @returns {*}
      */
     getAccount(address) {
-        return super.__getAccount(address)
+        if (isEmpty(address)) {
+            throw new Error('address is empty')
+        }
+        return super.__get(Method.GetAccount, address)
     }
 }

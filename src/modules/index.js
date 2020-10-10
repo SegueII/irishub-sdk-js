@@ -1,5 +1,6 @@
 import { CoinSwap } from './coinswap'
 import { Token } from './token'
+import { Auth } from './auth'
 
 export class ModuleManager {
 
@@ -11,6 +12,7 @@ export class ModuleManager {
         this.provider = provider
         this._add(new CoinSwap(provider, opt))
         this._add(new Token(provider, opt))
+        this._add(new Auth(provider, opt))
     }
 
     /**
@@ -39,7 +41,7 @@ export class ModuleManager {
      * @private
      */
     _add(module) {
-        Object.getOwnPropertyNames(Object.getPrototypeOf(module)).forEach((name) => {
+        Object.getOwnPropertyNames(Object.getPrototypeOf(module)).forEach(name => {
             if (!this.methods) {
                 this.methods = {}
             }

@@ -16,20 +16,6 @@ export class AbstractModule {
     }
 
     /**
-     * Get the account information on blockchain
-     *
-     * @param address {string} - address of account
-     * @returns {*}
-     */
-    async __getAccount (address) {
-        if (isEmpty(address)) {
-            throw new Error('address is empty')
-        }
-        return this.__get(Method.GetAccount, address)
-    }
-
-
-    /**
      * Information about the connected node
      *
      * @return {Promise}
