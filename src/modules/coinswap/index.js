@@ -10,7 +10,7 @@ export class CoinSwap extends AbstractModule {
      *
      * @param provider {WsProvider|HttpProvider} - agent of network
      * @param opt {object} - other configurable parameters
-     * @return {Bank}
+     * @return {CoinSwap}
      */
     constructor(provider, opt) {
         super(provider, opt)
