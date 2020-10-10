@@ -36,14 +36,14 @@ export class CoinSwap extends AbstractModule {
      * @return {Promise<{resp: *, hash: string}>}
      */
     addLiquidity(maxToken, irisAmt, minLiquidity, deadline, sender, config) {
-        let msg = {
+        let msgs = [{
             max_token: maxToken,
             exact_iris_amt: irisAmt,
             min_liquidity: minLiquidity,
             deadline: deadline
-        }
+        }]
         config.txType = 'add_liquidity'
-        return super.__sendTransaction(sender, msg, config)
+        return super.__sendTransaction(sender, msgs, config)
     }
 
     /**
@@ -57,14 +57,14 @@ export class CoinSwap extends AbstractModule {
      * @return {Promise<{resp: *, hash: string}>}
      */
     removeLiquidity(minToken, withdrawLiquidity, minIrisAmt, deadline, sender, config) {
-        let msg = {
+        let msgs = [{
             min_token: minToken,
             withdraw_liquidity: withdrawLiquidity,
             min_iris_amt: minIrisAmt,
             deadline: deadline
-        }
+        }]
         config.txType = 'remove_liquidity'
-        return super.__sendTransaction(sender, msg, config)
+        return super.__sendTransaction(sender, msgs, config)
     }
 
     /**
@@ -76,14 +76,14 @@ export class CoinSwap extends AbstractModule {
      * @param config {Object} - config information includes: fee,gas,memo,timeout,network,chain,privateKey.if some properties is null ,will use the IrisClient default options
      */
     swap(input, output, deadline, isBuyOrder, config = {}) {
-        let msg = {
+        let msgs = [{
             input: input,
             output: output,
             deadline: deadline,
             isBuyOrder: isBuyOrder
-        }
+        }]
         config.txType = 'swap_order'
-        return super.__sendTransaction(input.address, msg, config)
+        return super.__sendTransaction(input.address, msgs, config)
     }
 
     /**

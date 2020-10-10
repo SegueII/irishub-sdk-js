@@ -113,7 +113,7 @@ export class AbstractModule {
      * @param config
      * @return {Promise<{resp: *, hash: string}>}
      */
-    async __sendTransaction (singer, msg, config) {
+    async __sendTransaction (singer, msgs, config) {
         let opts = await this.__checkAndSetConfig(singer, config)
         let req = {
             chain_id: opts.chain_id,
@@ -124,7 +124,7 @@ export class AbstractModule {
             gas: opts.gas,
             memo: opts.memo,
             type: opts.txType,
-            msg: msg
+            msgs: msgs
         }
         let builder = crypto.getBuilder(opts.chain, opts.network)
         let stdTx
