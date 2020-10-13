@@ -1,9 +1,11 @@
-import { ModuleManager } from './modules'
-import { ProviderFactory } from './net'
-import { isEmpty, optional } from './utils'
-import { ApiRouter } from './modules/router'
-import { defaultOpts, defaultServer, Method, rpcMethods } from './constants'
+import {ModuleManager} from './modules'
+import {ProviderFactory} from './net'
+import {isEmpty, optional} from './utils'
+import {ApiRouter} from './modules/router'
+import {defaultOpts, defaultServer, Method, rpcMethods} from './constants'
 import * as crypto from 'irisnet-crypto'
+
+let axios = require('axios');
 
 const camel = require('camelcase')
 
@@ -117,15 +119,24 @@ export class IrisClient {
      * @param tx {Tx}
      * @param opts {Object}
      */
-    sendRawTransaction(tx, opts = {}) {
-        let chain = optional(opts.chain, this.option.chain)
-        let urlHandler = ApiRouter.getSubRouter(chain).get(Method.Broadcast)
-        if (!urlHandler) {
-            throw new Error(`no handler found broadcast`)
-        }
-        return this.provider.post(urlHandler(opts), tx, {
-            timeout: opts.timeout
-        })
+    async sendRawTransaction(url, tx, opts = {}) {
+        let config = {
+            baseURL: url,
+            timeout: 200000,
+            url: '/',
+        };
+        let instance = axios.create(config);
+        let data = {
+            jsonrpc: '2.0',
+            id: 'jsonrpc-client',
+            method: 'broadcast_tx_commit',
+            params: {
+                tx: tx,
+            }
+        };
+
+        let res = await instance.post(url, data);
+        return res.data
     }
 }
 
